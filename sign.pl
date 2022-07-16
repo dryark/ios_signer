@@ -44,8 +44,16 @@ my $appfiles = get_dirs( $app );
 #print "\n\n";
 
 print "=== Signing ===\n";
+my $xctest = "";
 for my $subcomp ( @$appfiles ) {
+    if( $subcomp =~ m/\.xctest$/ ) {
+        $xctest = $subcomp;
+        next;
+    }
     sign( $subcomp, $signer, $entitlements_file );
+}
+if( $xctest ) {
+    sign( $xctest, $signer, $entitlements_file );
 }
 sign( $app, $signer, $entitlements_file );
 unlink $entitlements_file;
@@ -80,7 +88,7 @@ sub get_dirs {
         next if( $file =~ m/^\.+$/ );
         my $full = "$path/$file";
         if( -d $full ) {
-            push( @$dirs, $full ) if( $file =~ m/\.(appex|framework|dylib)$/ );
+            push( @$dirs, $full ) if( $file =~ m/\.(appex|framework|dylib|xctest)$/ );
             get_dirs( $full, $dirs );
         }
     }
