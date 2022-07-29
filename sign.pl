@@ -59,6 +59,7 @@ if( $idchange ) {
             $newid =~ s/^$from/$to/;
             print "$part\n";
             print "  To:$newid From:$oldid\n";
+            print `/usr/libexec/PlistBuddy -c "set CFBundleIdentifier $newid" "$full"`;
         } else {
             if( $oldid !~ m/^com\.apple\./ ) {
                 print "$part\n";
